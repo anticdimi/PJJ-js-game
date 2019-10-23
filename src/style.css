@@ -16,10 +16,7 @@
 
 table {
     width: 200px;
-}
-
-td {
-   height: 50px;
+    table-layout: fixed;
 }
 
 #choice {
@@ -31,6 +28,7 @@ td {
 #choice_table td {
     height: 50px;
     width: 43px;
+    text-align: center;
 }
 
 #player_choice {
@@ -56,4 +54,6 @@ td {
 
 td {
     border: 1px dashed black;
+    text-align: center;
+    height: 50px;
 }

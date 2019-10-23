@@ -167,7 +167,7 @@ const renderState = (state) => {
 const choiceOnClick = (id) => {
     const currPlayerCell = choiceRows[currentRowIndex].getElementsByTagName('td')[currentCellIndex];
 
-    currPlayerCell.innerHTML = symbolMap[id];
+    currPlayerCell.textContent = symbolMap[id];
 
     combination.push(parseInt(id));
 
