@@ -1,0 +1,59 @@
+/*Not an expert in styling...*/
+
+#wrapper {
+    margin-left: auto;
+    margin-right: auto;
+
+    border: 1px dotted red;
+
+    width: 600px;
+    height: 800px;
+
+    position: relative;
+
+    visibility: hidden;
+}
+
+table {
+    width: 200px;
+}
+
+td {
+   height: 50px;
+}
+
+#choice {
+    position: absolute;
+    left: 0px;
+    top: 400px;
+}
+
+#choice_table td {
+    height: 50px;
+    width: 43px;
+}
+
+#player_choice {
+    position: absolute;
+    left: 0px;
+}
+
+#score {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+
+#timer {
+    visibility: hidden;
+}
+
+#right_answer {
+    position: absolute;
+    right: 0px;
+    top: 400px;
+}
+
+td {
+    border: 1px dashed black;
+}

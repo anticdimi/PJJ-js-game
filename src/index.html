@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript mastermind</title>
+    <link rel="stylesheet" href="./style.css" />
+
+<!--    <script type="text/javascript" src="./game.js"></script>-->
+</head>
+<body>
+<button type="button" onclick="startGame()">Start game!</button>
+<button type="button" onclick="resetGame()">Restart game!</button>
+
+<p id="timer">Time elapsed:</p>
+<div id="wrapper">
+    <table id="player_choice">
+        <tr>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+        </tr>
+
+        <tr>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+        </tr>
+
+        <tr>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+        </tr>
+
+        <tr>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+        </tr>
+
+        <tr>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+        </tr>
+
+        <tr>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+        </tr>
+    </table>
+
+    <table id="choice_table">
+        <tr id="choice">
+            <td onclick="choiceOnClick(this.id)" id="0"> </td>
+            <td onclick="choiceOnClick(this.id)" id="1"> </td>
+            <td onclick="choiceOnClick(this.id)" id="2"> </td>
+            <td onclick="choiceOnClick(this.id)" id="3"> </td>
+        </tr>
+    </table>
+
+    <table id="right_answer">
+        <tr>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+        </tr>
+    </table>
+
+    <table id="score">
+        <tr>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+        </tr>
+
+        <tr>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+        </tr>
+
+        <tr>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+        </tr>
+
+        <tr>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+        </tr>
+
+        <tr>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+        </tr>
+
+        <tr>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+        </tr>
+
+    </table>
+
+</div>
+
+<script type="text/javascript" src="./game.js"></script>
+</body>
+</html>
