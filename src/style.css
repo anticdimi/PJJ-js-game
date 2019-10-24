@@ -4,8 +4,6 @@
     margin-left: auto;
     margin-right: auto;
 
-    border: 1px dotted red;
-
     width: 600px;
     height: 800px;
 
@@ -46,14 +44,14 @@ table {
     visibility: hidden;
 }
 
-#right_answer {
+#correct_answer {
     position: absolute;
     right: 0px;
     top: 400px;
 }
 
 td {
-    border: 1px dashed black;
+    border: 1px solid black;
     text-align: center;
     height: 50px;
 }

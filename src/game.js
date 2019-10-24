@@ -20,7 +20,7 @@ const GAME_TIME = 60;
 
 let currentRowIndex = 0;
 let currentCellIndex = 0;
-let combination = [];
+let combination = new Array(4);
 let currentState = {};
 
 let solution;
@@ -46,8 +46,24 @@ const generateSolution = () => {
 
 };
 
+const initGame = () => {
+    solution = generateSolution();
+
+    for (let i = 0; i < 4; i++) {
+        document.getElementById('choice')
+            .getElementsByTagName('td')[i].innerHTML = symbolMap[i];
+    }
+
+    document.getElementById('wrapper')
+        .style.visibility = 'visible';
+
+    document.getElementById('timer')
+        .style.visibility = 'visible';
+};
+
 const startGame = () => {
     if (!timerStarted) {
+        timerStarted = true;
         timer = window.setInterval(() => {
             elapsedTime++;
 
@@ -59,28 +75,17 @@ const startGame = () => {
                 endGame(currentState);
             }
         }, 1000);
+
+        initGame();
     }
-
-    for (let i = 0; i < 4; i++) {
-        document.getElementById('choice')
-            .getElementsByTagName('td')[i].innerHTML = symbolMap[i];
-    }
-
-    solution = generateSolution();
-
-    document.getElementById('wrapper')
-        .style.visibility = 'visible';
-
-    document.getElementById('timer')
-        .style.visibility = 'visible';
 };
 
 const endGame = (state) => {
-    window.alert('Game over...');
+    window.alert('Game over');
     notifyServer(state);
     clearInterval(timer);
 
-    const cells = document.getElementById('right_answer').getElementsByTagName('td');
+    const cells = document.getElementById('correct_answer').getElementsByTagName('td');
 
     for (let i = 0; i < 4; i++) {
         cells[i].innerHTML = symbolMap[solution[i]];
@@ -164,28 +169,52 @@ const renderState = (state) => {
 
 };
 
-const choiceOnClick = (id) => {
-    const currPlayerCell = choiceRows[currentRowIndex].getElementsByTagName('td')[currentCellIndex];
+const deleteChoice = (id) => {
+    const i = parseInt(id[0]);
+    const j = parseInt(id[1]);
+    const clickedCell = choiceRows[i].getElementsByTagName('td')[j];
+    if (i === currentRowIndex) {
+        if (clickedCell.className === 'armed') {
+            clickedCell.classList.toggle('armed');
+            clickedCell.innerHTML = '';
+            if (j <= currentCellIndex)
+                currentCellIndex = j;
+        }
+    }
+};
 
-    currPlayerCell.textContent = symbolMap[id];
-
-    combination.push(parseInt(id));
-
-    currentCellIndex++;
-
-    if (currentCellIndex === 4) {
+const updateCursor = (currentCellIndex) => {
+    if (currentCellIndex === 3) {
         console.log('Current combination: ' + combination);
         currentState = evaluateScore(combination, solution);
         renderState(currentState);
         combination = [];
-
-        currentCellIndex = 0;
 
         currentRowIndex++;
 
         if (currentRowIndex > 5) {
             endGame(currentState);
         }
+
+        return 0;
+    }
+
+    for (let i = currentCellIndex; i < 4; i++) {
+        if (choiceRows[currentRowIndex].getElementsByTagName('td')[i].className !== 'armed')
+            return i;
+    }
+};
+
+const choiceOnClick = (id) => {
+    const currPlayerCell = choiceRows[currentRowIndex].getElementsByTagName('td')[currentCellIndex];
+
+    if (currPlayerCell.className !== 'armed') {
+        currPlayerCell.innerHTML = symbolMap[id];
+        combination[currentCellIndex] = parseInt(id);
+
+        currPlayerCell.classList.toggle('armed');
+
+        currentCellIndex = updateCursor(currentCellIndex);
     }
 };
 
