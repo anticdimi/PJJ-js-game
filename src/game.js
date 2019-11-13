@@ -77,6 +77,7 @@ const startGame = () => {
 };
 
 const endGame = (state) => {
+    attempts = MAX_ATTEMPTS + 1;
     notifyServer(state);
     clearInterval(timer);
 
