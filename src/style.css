@@ -14,19 +14,12 @@
 
 table {
     width: 200px;
-    table-layout: fixed;
 }
 
 #choice {
     position: absolute;
     left: 0px;
     top: 400px;
-}
-
-#choice_table td {
-    height: 50px;
-    width: 43px;
-    text-align: center;
 }
 
 #player_choice {
@@ -47,11 +40,21 @@ table {
 #correct_answer {
     position: absolute;
     right: 0px;
-    top: 400px;
+    top: 370px;
 }
 
 td {
     border: 1px solid black;
     text-align: center;
     height: 50px;
+    width: 50px;
+}
+
+#btn_wrap {
+    position: relative;
+
+    left: 43%;
+
+    margin-left: auto;
+    margin-right: auto;
 }

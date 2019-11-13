@@ -2,18 +2,21 @@
 // Config
 
 const symbolMap = {
-    0: 'sym_1',
-    1: 'sym_2',
-    2: 'sym_3',
-    3: 'sym_4',
+    0: "<img src='../imgs/red.png' style='width: 80%;height: 80%'>",
+    1: '<img src="../imgs/orange.png" style="width: 80%;height: 80%">',
+    2: '<img src="../imgs/turqouise.png" style="width: 80%;height: 80%">',
+    3: '<img src="../imgs/violet.png" style="width: 80%;height: 80%">',
 };
 
 const scoreSymbolMap = {
-    0: '+',
-    1: '*',
+    0: '<img src="../imgs/green.png" style="width: 80%;height: 80%">',
+    1: "<img src='../imgs/red.png' style='width: 80%;height: 80%'>",
 };
 
-const GAME_TIME = 60;
+const GAME_TIME = 90;
+const MAX_ATTEMPTS = 5;
+
+let SECRET;
 
 // =========================================================
 // Global params
@@ -23,7 +26,9 @@ let currentCellIndex = 0;
 let combination = new Array(4);
 let currentState = {};
 
-let solution;
+let attempts = 0;
+
+let generatedSecret;
 
 let timerStarted = false;
 let timer;
@@ -42,23 +47,10 @@ const generateSolution = () => {
         generatedSolution.push(parseInt(Math.random() * 100 + "") % 4);
     }
     console.log(generatedSolution);
+
+    SECRET = generatedSolution;
+
     return generatedSolution;
-
-};
-
-const initGame = () => {
-    solution = generateSolution();
-
-    for (let i = 0; i < 4; i++) {
-        document.getElementById('choice')
-            .getElementsByTagName('td')[i].innerHTML = symbolMap[i];
-    }
-
-    document.getElementById('wrapper')
-        .style.visibility = 'visible';
-
-    document.getElementById('timer')
-        .style.visibility = 'visible';
 };
 
 const startGame = () => {
@@ -67,8 +59,12 @@ const startGame = () => {
         timer = window.setInterval(() => {
             elapsedTime++;
 
+            const progress = ((elapsedTime / GAME_TIME) * 100);
+            document.getElementsByClassName('progress-bar')[0]
+                .style.width = progress+'%';
+
             document.getElementById('timer')
-                .innerText = 'Time elapsed: ' + elapsedTime;
+                .setAttribute('aria-valuenow', progress+'');
 
             if (elapsedTime === GAME_TIME) {
                 clearInterval(timer);
@@ -81,14 +77,13 @@ const startGame = () => {
 };
 
 const endGame = (state) => {
-    window.alert('Game over');
     notifyServer(state);
     clearInterval(timer);
 
     const cells = document.getElementById('correct_answer').getElementsByTagName('td');
 
     for (let i = 0; i < 4; i++) {
-        cells[i].innerHTML = symbolMap[solution[i]];
+        cells[i].innerHTML = symbolMap[generatedSecret[i]];
     }
 };
 
@@ -96,43 +91,37 @@ const resetGame = () => {
     location.reload();
 };
 
-const evaluateScore = (combination, solution) => {
-    let rightPlace = 0;
+const evaluateScore = (combination) => {
+    let hints = { rightPlace: 0, wrongPlace: 0 };
 
-    let wrongPlace = 0;
+    let solution = SECRET.slice();
 
-    const matched = [];
+    // check for correct positions
     for (let i = 0; i < 4; i++) {
         if (combination[i] === solution[i]) {
-            rightPlace++;
-            matched.push(i);
+            hints.rightPlace++;
+            solution[i] = combination[i] = null;
         }
-
     }
+    // check for incorrect positions
     for (let i = 0; i < 4; i++) {
-        if (matched.includes(i)) {
-            continue;
-
-        }
-        for (let j = 0; j < 4; j++) {
-            if (matched.includes(j)) {
-                continue;
-
-            }
-            if (i !== j) {
-                if (combination[i] === solution[j]) {
-                    wrongPlace++;
-                    break;
+        for (let x = 0; x < 4; x++) {
+            if(combination[i] && solution[x]) {
+                if (combination[i] === solution[x]) {
+                    hints.wrongPlace++;
+                    solution[x] = combination[i] = null;
                 }
             }
         }
-
     }
-    return { rightPlace, wrongPlace };
+
+    ++attempts;
+
+    return hints;
 };
 
 const notifyServer = (state) => {
-    // TODO implement REST server
+    // TODO which server?
     /*
     const xhttp = new XMLHttpRequest();
     xhttp.open('POST', 'some_server_url', false);
@@ -149,8 +138,6 @@ const notifyServer = (state) => {
 };
 
 const renderState = (state) => {
-    console.log(state['rightPlace']);
-    console.log(state.wrongPlace);
     for (let i = 0; i < state.rightPlace; i++) {
         scoreRows[currentRowIndex].getElementsByTagName('td')[i]
             .innerHTML = scoreSymbolMap[0];
@@ -185,8 +172,7 @@ const deleteChoice = (id) => {
 
 const updateCursor = (currentCellIndex) => {
     if (currentCellIndex === 3) {
-        console.log('Current combination: ' + combination);
-        currentState = evaluateScore(combination, solution);
+        currentState = evaluateScore(combination);
         renderState(currentState);
         combination = [];
 
@@ -206,6 +192,10 @@ const updateCursor = (currentCellIndex) => {
 };
 
 const choiceOnClick = (id) => {
+    if (attempts > MAX_ATTEMPTS) {
+        return;
+    }
+
     const currPlayerCell = choiceRows[currentRowIndex].getElementsByTagName('td')[currentCellIndex];
 
     if (currPlayerCell.className !== 'armed') {
@@ -218,4 +208,17 @@ const choiceOnClick = (id) => {
     }
 };
 
+const initGame = () => {
+    generatedSecret = generateSolution();
 
+    for (let i = 0; i < 4; i++) {
+        document.getElementById('choice')
+            .getElementsByTagName('td')[i].innerHTML = symbolMap[i];
+    }
+
+    document.getElementById('wrapper')
+        .style.visibility = 'visible';
+
+    document.getElementById('timer')
+        .style.visibility = 'visible';
+};

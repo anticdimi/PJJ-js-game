@@ -5,13 +5,28 @@
     <title>JavaScript mastermind</title>
     <link rel="stylesheet" href="./style.css" />
 
-<!--    <script type="text/javascript" src="./game.js"></script>-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
+<!--    JQuery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 </head>
 <body>
-<button type="button" onclick="startGame()">Start game!</button>
-<button type="button" onclick="resetGame()">Restart game!</button>
 
-<p id="timer">Time elapsed:</p>
+
+<div class="progress" id="timer">
+    <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" aria-valuenow="0"
+         aria-valuemin="0" aria-valuemax="100" style="width:0%">
+
+    </div>
+</div>
+
+<div id="btn_wrap" class="btn-group-vertical">
+    <button type="button" onclick="startGame()" class="btn btn-default">Start game!</button><br>
+    <button type="button" onclick="resetGame()" class="btn btn-default">Restart game!</button>
+</div>
+
 <div id="wrapper">
     <table id="player_choice">
         <tr>
@@ -57,7 +72,8 @@
         </tr>
     </table>
 
-    <table id="choice_table">
+    <div class="table-responsive">
+        <table id="choice_table">
         <tr id="choice">
             <td onclick="choiceOnClick(this.id)" id="0"> </td>
             <td onclick="choiceOnClick(this.id)" id="1"> </td>
@@ -65,9 +81,10 @@
             <td onclick="choiceOnClick(this.id)" id="3"> </td>
         </tr>
     </table>
+    </div>
 
-
-    <table id="correct_answer">
+    <div class="table-responsive">
+        <table id="correct_answer">
         <caption>Correct answer</caption>
         <tr>
             <td> </td>
@@ -76,8 +93,10 @@
             <td> </td>
         </tr>
     </table>
+    </div>
 
-    <table id="score">
+    <div class="table-responsive">
+        <table id="score">
         <tr>
             <td> </td>
             <td> </td>
@@ -121,6 +140,7 @@
         </tr>
 
     </table>
+    </div>
 
 </div>
 
