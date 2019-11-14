@@ -16,10 +16,11 @@ const scoreSymbolMap = {
 const GAME_TIME = 90;
 const MAX_ATTEMPTS = 5;
 
-let SECRET;
 
 // =========================================================
 // Global params
+
+let SECRET;
 
 let currentRowIndex = 0;
 let currentCellIndex = 0;
@@ -27,8 +28,6 @@ let combination = new Array(4);
 let currentState = {};
 
 let attempts = 0;
-
-let generatedSecret;
 
 let timerStarted = false;
 let timer;
@@ -47,8 +46,6 @@ const generateSolution = () => {
         generatedSolution.push(parseInt(Math.random() * 100 + "") % 4);
     }
     console.log(generatedSolution);
-
-    SECRET = generatedSolution;
 
     return generatedSolution;
 };
@@ -84,7 +81,7 @@ const endGame = (state) => {
     const cells = document.getElementById('correct_answer').getElementsByTagName('td');
 
     for (let i = 0; i < 4; i++) {
-        cells[i].innerHTML = symbolMap[generatedSecret[i]];
+        cells[i].innerHTML = symbolMap[SECRET[i]];
     }
 };
 
@@ -210,7 +207,7 @@ const choiceOnClick = (id) => {
 };
 
 const initGame = () => {
-    generatedSecret = generateSolution();
+    SECRET = generateSolution();
 
     for (let i = 0; i < 4; i++) {
         document.getElementById('choice')
