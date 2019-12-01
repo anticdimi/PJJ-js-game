@@ -13,25 +13,15 @@ const scoreSymbolMap = {
     1: "<img src='../imgs/red.png' style='width: 80%;height: 80%'>",
 };
 
-const GAME_TIME = 90;
-const MAX_ATTEMPTS = 5;
-
 
 // =========================================================
 // Global params
 
-let SECRET;
+const game = new Game();
 
 let currentRowIndex = 0;
 let currentCellIndex = 0;
 let combination = new Array(4);
-let currentState = {};
-
-let attempts = 0;
-
-let timerStarted = false;
-let timer;
-let elapsedTime = 0;
 
 const choiceRows = document.getElementById('player_choice')
     .getElementsByTagName('tr');
@@ -39,60 +29,82 @@ const scoreRows = document.getElementById('score')
     .getElementsByTagName('tr');
 // =========================================================
 
-// TODO check for better random
-const generateSolution = () => {
-    let generatedSolution = [];
-    for (let i = 0; i < 4; i++) {
-        generatedSolution.push(parseInt(Math.random() * 100 + "") % 4);
-    }
-    console.log(generatedSolution);
+function Game() {
+    this.GAME_TIME = 90;
+    this.MAX_ATTEMPTS = 5;
+    this.generateSecret = () => {
+        let generatedSecret = [];
+        for (let i = 0; i < 4; i++) {
+            generatedSecret.push(parseInt(Math.random() * 100 + "") % 4);
+        }
+        console.log(generatedSecret);
 
-    return generatedSolution;
-};
+        return generatedSecret;
+    };
 
-const startGame = () => {
-    if (!timerStarted) {
-        timerStarted = true;
-        timer = window.setInterval(() => {
-            elapsedTime++;
+    this.attempts = 0;
+    this.timerStarted = false;
+    this.timerListener = 0;
+    this.elapsedTime = 0;
 
-            const progress = ((elapsedTime / GAME_TIME) * 100);
-            document.getElementsByClassName('progress-bar')[0]
-                .style.width = progress+'%';
+    this.initGame = () => {
+        this.SECRET = this.generateSecret();
 
-            document.getElementById('timer')
-                .setAttribute('aria-valuenow', progress+'');
+        for (let i = 0; i < 4; i++) {
+            document.getElementById('choice')
+                .getElementsByTagName('td')[i].innerHTML = symbolMap[i];
+        }
 
-            if (elapsedTime === GAME_TIME) {
-                clearInterval(timer);
-                endGame(currentState);
-            }
-        }, 1000);
+        document.getElementById('wrapper')
+            .style.visibility = 'visible';
 
-        initGame();
-    }
-};
+        document.getElementById('timer')
+            .style.visibility = 'visible';
+    };
 
-const endGame = (state) => {
-    attempts = MAX_ATTEMPTS + 1;
-    notifyServer(state);
-    clearInterval(timer);
+    this.startGame = () => {
+        if (!this.timerStarted) {
+            this.timerStarted = true;
+            this.timerListener = window.setInterval(() => {
+                this.elapsedTime++;
 
-    const cells = document.getElementById('correct_answer').getElementsByTagName('td');
+                const progress = ((this.elapsedTime / this.GAME_TIME) * 100);
+                document.getElementsByClassName('progress-bar')[0]
+                    .style.width = progress+'%';
 
-    for (let i = 0; i < 4; i++) {
-        cells[i].innerHTML = symbolMap[SECRET[i]];
-    }
-};
+                document.getElementById('timer')
+                    .setAttribute('aria-valuenow', progress+'');
 
-const resetGame = () => {
-    location.reload();
-};
+                if (this.elapsedTime === this.GAME_TIME) {
+                    clearInterval(game.timerListener);
+                    this.endGame();
+                }
+            }, 1000);
+
+            this.initGame();
+        }
+    };
+    this.endGame = () => {
+        this.attempts = this.MAX_ATTEMPTS + 1;
+        notifyServer(this.currentState);
+        clearInterval(this.timerListener);
+
+        const cells = document.getElementById('correct_answer').getElementsByTagName('td');
+
+        for (let i = 0; i < 4; i++) {
+            cells[i].innerHTML = symbolMap[this.SECRET[i]];
+        }
+    };
+
+    this.resetGame = () => {
+        location.reload();
+    };
+}
 
 const evaluateScore = (combination) => {
     let hints = { rightPlace: 0, wrongPlace: 0 };
 
-    let solution = SECRET.slice();
+    let solution = game.SECRET.slice();
 
     // check for correct positions
     for (let i = 0; i < 4; i++) {
@@ -113,7 +125,7 @@ const evaluateScore = (combination) => {
         }
     }
 
-    ++attempts;
+    ++game.attempts;
 
     return hints;
 };
@@ -135,21 +147,21 @@ const notifyServer = (state) => {
 
 };
 
-const renderState = (state) => {
-    for (let i = 0; i < state.rightPlace; i++) {
+const renderState = () => {
+    for (let i = 0; i < game.currentState.rightPlace; i++) {
         scoreRows[currentRowIndex].getElementsByTagName('td')[i]
             .innerHTML = scoreSymbolMap[0];
 
     }
-    for (let i = state.rightPlace; i < state.rightPlace + state.wrongPlace; i++) {
+    for (let i = game.currentState.rightPlace; i < game.currentState.rightPlace + game.currentState.wrongPlace; i++) {
         scoreRows[currentRowIndex].getElementsByTagName('td')[i]
             .innerHTML = scoreSymbolMap[1];
 
     }
-    if (state.rightPlace === 4) {
+    if (game.currentState.rightPlace === 4) {
         window.alert('Wooohooo you\'ve won the game!');
 
-        endGame(state);
+        game.endGame(game.currentState);
     }
 
 };
@@ -170,14 +182,14 @@ const deleteChoice = (id) => {
 
 const updateCursor = (currentCellIndex) => {
     if (currentCellIndex === 3) {
-        currentState = evaluateScore(combination);
-        renderState(currentState);
+        game.currentState = evaluateScore(combination);
+        renderState();
         combination = [];
 
         currentRowIndex++;
 
         if (currentRowIndex > 5) {
-            endGame(currentState);
+            game.endGame();
         }
 
         return 0;
@@ -190,7 +202,7 @@ const updateCursor = (currentCellIndex) => {
 };
 
 const choiceOnClick = (id) => {
-    if (attempts > MAX_ATTEMPTS) {
+    if (game.attempts > game.MAX_ATTEMPTS) {
         return;
     }
 
@@ -204,19 +216,4 @@ const choiceOnClick = (id) => {
 
         currentCellIndex = updateCursor(currentCellIndex);
     }
-};
-
-const initGame = () => {
-    SECRET = generateSolution();
-
-    for (let i = 0; i < 4; i++) {
-        document.getElementById('choice')
-            .getElementsByTagName('td')[i].innerHTML = symbolMap[i];
-    }
-
-    document.getElementById('wrapper')
-        .style.visibility = 'visible';
-
-    document.getElementById('timer')
-        .style.visibility = 'visible';
 };
