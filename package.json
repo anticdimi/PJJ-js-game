@@ -1,0 +1,26 @@
+{
+  "name": "pjj-js-game",
+  "version": "1.0.0",
+  "description": "Simple vanilla javascript mastermind game.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/antic11d/PJJ-js-game.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/antic11d/PJJ-js-game/issues"
+  },
+  "homepage": "https://github.com/antic11d/PJJ-js-game#readme",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1"
+  }
+}

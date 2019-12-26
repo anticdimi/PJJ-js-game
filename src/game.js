@@ -1,6 +1,8 @@
 // =========================================================
 // Config
 
+const SERVER_ENDPOINT = 'http://localhost:3000';
+
 const symbolMap = {
     0: "<img src='../imgs/red.png' style='width: 80%;height: 80%'>",
     1: '<img src="../imgs/orange.png" style="width: 80%;height: 80%">',
@@ -84,9 +86,9 @@ function Game() {
             this.initGame();
         }
     };
-    this.endGame = () => {
+    this.endGame = async () => {
         this.attempts = this.MAX_ATTEMPTS + 1;
-        notifyServer(this.currentState);
+        await notifyServer(this.currentState);
         clearInterval(this.timerListener);
 
         const cells = document.getElementById('correct_answer').getElementsByTagName('td');
@@ -130,21 +132,16 @@ const evaluateScore = (combination) => {
     return hints;
 };
 
-const notifyServer = (state) => {
-    // TODO which server?
-    /*
-    const xhttp = new XMLHttpRequest();
-    xhttp.open('POST', 'some_server_url', false);
-    xhttp.setRequestHeader('Content-Type', "application/json;charset=UTF-8");
-    xhttp.send(JSON.stringify({ user: 'some_username', score: state}));
-    */
 
-    console.log('===================================');
-    console.log('Should notify server');
-    console.log('Your score: ');
-    console.log(state);
-    console.log('===================================');
-
+const notifyServer = async (state) => {
+    try {
+        const res = await axios.post(SERVER_ENDPOINT+'/api/save', { rightPlace: state.rightPlace, id: "moj_id" });
+        console.log(res.data);
+        // console.log(res.body.message);
+    } catch (e) {
+        console.log('Error while notifing server: ');
+        console.log(e);
+    }
 };
 
 const renderState = () => {
