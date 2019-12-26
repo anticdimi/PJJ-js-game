@@ -14,9 +14,9 @@ class DBController {
         app.post('/api/save', async (req, res) => {
             const dbController = new DBController(req, res);
             if (await dbController.getUser() !== undefined)
-                await dbController.postUsers();
-            else
                 await dbController.putUser();
+            else
+                await dbController.postUsers();
         });
 
         app.get('/api/scores', async (req, res) => {
