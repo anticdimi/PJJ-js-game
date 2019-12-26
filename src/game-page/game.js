@@ -4,15 +4,15 @@
 const SERVER_ENDPOINT = 'http://localhost:3000';
 
 const symbolMap = {
-    0: "<img src='../imgs/red.png' style='width: 80%;height: 80%'>",
-    1: '<img src="../imgs/orange.png" style="width: 80%;height: 80%">',
-    2: '<img src="../imgs/turqouise.png" style="width: 80%;height: 80%">',
-    3: '<img src="../imgs/violet.png" style="width: 80%;height: 80%">',
+    0: "<img src='../../imgs/red.png' style='width: 80%;height: 80%'>",
+    1: '<img src="../../imgs/orange.png" style="width: 80%;height: 80%">',
+    2: '<img src="../../imgs/turqouise.png" style="width: 80%;height: 80%">',
+    3: '<img src="../../imgs/violet.png" style="width: 80%;height: 80%">',
 };
 
 const scoreSymbolMap = {
-    0: '<img src="../imgs/green.png" style="width: 80%;height: 80%">',
-    1: "<img src='../imgs/red.png' style='width: 80%;height: 80%'>",
+    0: '<img src="../../imgs/green.png" style="width: 80%;height: 80%">',
+    1: "<img src='../../imgs/red.png' style='width: 80%;height: 80%'>",
 };
 
 
@@ -137,7 +137,6 @@ const notifyServer = async (state) => {
     try {
         const res = await axios.post(SERVER_ENDPOINT+'/api/save', { rightPlace: state.rightPlace, id: "moj_id" });
         console.log(res.data);
-        // console.log(res.body.message);
     } catch (e) {
         console.log('Error while notifing server: ');
         console.log(e);
