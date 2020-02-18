@@ -10,8 +10,14 @@ class MongoService {
     async connect() {
         const connect = util.promisify(mongoClient.connect);
 
-        this.client = await connect(this.url);
-        this.database = this.client.db(this.databaseName);
+        try {
+            this.client = await connect(this.url);
+            this.database = this.client.db(this.databaseName);
+        } catch (e) {
+            console.log('Error in mongoService connect');
+            console.error(e);
+        }
+
     }
 
     disconnect() {
@@ -41,26 +47,6 @@ class MongoService {
     insert(collection, parameters) {
         return new Promise((resolve, reject) => {
             this.database.collection(collection).insertOne(parameters, function (error) {
-                if (error) reject();
-
-                resolve();
-            });
-        });
-    }
-
-    update(collection, findParameters, updateParameters) {
-        return new Promise((resolve, reject) => {
-            this.database.collection(collection).updateOne(findParameters, { $set: updateParameters }, function (error) {
-                if (error) reject();
-
-                resolve();
-            });
-        });
-    }
-
-    delete(collection, findParameters) {
-        return new Promise((resolve, reject) => {
-            this.database.collection(collection).deleteOne(findParameters, function (error) {
                 if (error) reject();
 
                 resolve();

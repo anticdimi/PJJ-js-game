@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const DBController = require('./controllers/dbController');
 const cors = require('cors');
 
-const port = 3000;
+const port = 8080;
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

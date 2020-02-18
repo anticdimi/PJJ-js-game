@@ -1,7 +1,7 @@
 // =========================================================
 // Config
 
-const SERVER_ENDPOINT = 'http://localhost:3000';
+const SERVER_ENDPOINT = 'http://localhost:8080';
 
 const symbolMap = {
     0: "<img src='../../imgs/red.png' style='width: 80%;height: 80%'>",
