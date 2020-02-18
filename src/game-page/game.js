@@ -65,6 +65,11 @@ function Game() {
     };
 
     this.startGame = () => {
+        if (document.getElementById('usr').value === "") {
+            window.alert('Unesite username!');
+            return;
+        }
+
         if (!this.timerStarted) {
             this.timerStarted = true;
             this.timerListener = window.setInterval(() => {
@@ -135,7 +140,10 @@ const evaluateScore = (combination) => {
 
 const notifyServer = async (state) => {
     try {
-        const res = await axios.post(SERVER_ENDPOINT+'/api/save', { rightPlace: state.rightPlace, id: "moj_id" });
+        const user = document.getElementById('usr').value === '' ?
+            'random_placeholder' : document.getElementById('usr').value;
+
+        const res = await axios.post(SERVER_ENDPOINT+'/api/save', { rightPlace: state.rightPlace, id: user });
         console.log(res.data);
     } catch (e) {
         console.log('Error while notifing server: ');
