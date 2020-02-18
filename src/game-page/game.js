@@ -205,6 +205,10 @@ const updateCursor = (currentCellIndex) => {
     }
 };
 
+const goToLeaderboard = () => {
+    window.location.href='http://localhost:3001/';
+};
+
 const choiceOnClick = (id) => {
     if (game.attempts > game.MAX_ATTEMPTS) {
         return;
