@@ -92,8 +92,8 @@ function Game() {
         }
     };
     this.endGame = async () => {
+        await notifyServer(this.currentState, this.attempts);
         this.attempts = this.MAX_ATTEMPTS + 1;
-        await notifyServer(this.currentState);
         clearInterval(this.timerListener);
 
         const cells = document.getElementById('correct_answer').getElementsByTagName('td');
@@ -138,12 +138,12 @@ const evaluateScore = (combination) => {
 };
 
 
-const notifyServer = async (state) => {
+const notifyServer = async (state, attempts) => {
     try {
         const user = document.getElementById('usr').value === '' ?
             'random_placeholder' : document.getElementById('usr').value;
 
-        const res = await axios.post(SERVER_ENDPOINT+'/api/save', { rightPlace: state.rightPlace, id: user });
+        const res = await axios.post(SERVER_ENDPOINT+'/api/save', { rightPlace: (state.rightPlace * 100.0 * (1/attempts)), id: user });
         console.log(res.data);
     } catch (e) {
         console.log('Error while notifing server: ');
