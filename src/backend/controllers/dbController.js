@@ -26,6 +26,16 @@ class DBController {
             let users = await this.mongoDBService.find('users');
 
             this.mongoDBService.disconnect();
+
+            users = users.slice(0, 10);
+            users = users.sort((x, y) => x.score < y.score);
+            users.forEach(x => {
+                let buf = Buffer.from(x.date+'');
+
+                x.date = buf.slice(0, buf.lastIndexOf('T'))
+                    + ' '
+                    + buf.slice(buf.lastIndexOf('T')+1, buf.lastIndexOf('.'));
+            });
             this.response.send(users);
         } catch (e) {
             console.log('Error in get users.');
