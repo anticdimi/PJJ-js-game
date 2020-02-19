@@ -1,7 +1,36 @@
-/*
- * Leaderboard css File
-*/
+.table {
+    margin: auto;
+    margin-top: 20px;
+    border-collapse : collapse;
+    border-radius: 0.5rem;
+    background: #fff;
+    opacity: 1;
+}
+th {
+    background: cadetblue;
+    color: #fff;
+    border-radius: 0;
+}
 
-.Leaderboard {
-    /* propertys here */
+tr:nth-child(even) {
+    background: #f2f2f2;
+}
+
+tr:nth-child(odd) {
+    background: #fff;
+}
+
+th {
+    padding: 1rem 3rem;
+    text-align: center;
+}
+
+td {
+    padding: 2rem 3rem;
+    min-width: 200px;
+    text-align: center;
+}
+
+th, td {
+    font-size: 1.6rem;
 }
