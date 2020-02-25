@@ -8,14 +8,8 @@ class App extends Component {
 
     this.goTo = this.goTo.bind(this);
   }
-
-  async componentDidMount() {
-      // let res = await axios.get('http://localhost:8080/api/scores');
-      // res.data = res.data.sort((a, b) => a.score < b.score);
-      // this.setState({ data: res.data });
-  }
     goTo() {
-        window.location.href='http://localhost:63342/PJJ-js-game/src/game-page/index.html';
+        window.location.href='http://localhost/PJJ-js-game/src/game-page/';
     }
     render() {
 

@@ -143,7 +143,7 @@ const notifyServer = async (state, attempts) => {
         const user = document.getElementById('usr').value === '' ?
             'random_placeholder' : document.getElementById('usr').value;
 
-        const res = await axios.post(SERVER_ENDPOINT+'/api/save', { rightPlace: (state.rightPlace * 100.0 * (1/attempts)), id: user });
+        const res = await axios.post(SERVER_ENDPOINT+'/api/save', { rightPlace: (state.rightPlace * 10.0 * (1/attempts)), id: user });
         console.log(res.data);
     } catch (e) {
         console.log('Error while notifing server: ');

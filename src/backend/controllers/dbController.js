@@ -17,6 +17,10 @@ class DBController {
         app.get('/api/scores', async (req, res) => {
             await new DBController(req, res).getUsers();
         });
+
+        app.get('/users/:id', async (request, response) => {
+            await new DBController(request, response).deleteUser();
+        });
     }
 
     async getUsers() {
@@ -42,6 +46,14 @@ class DBController {
             console.error(e);
             this.response.send(e);
         }
+    }
+
+    async deleteUser() {
+        await this.mongoDBService.connect();
+        await this.mongoDBService.delete('users', { _id: this.request.params.id } );
+
+        this.mongoDBService.disconnect();
+        await this.response.json({ status: 'Success' });
     }
 
     async postUsers() {
